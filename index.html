@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShoeFit - スマホで簡単！足のサイズ計測アプリ</title>
+  <style>
+    /* ==========================================
+       CSS (スタイル定義)
+       ========================================== */
+    :root {
+      --primary-color: #4A90E2;
+      --primary-dark: #357ABD;
+      --secondary-color: #50E3C2;
+      --dark-text: #222222;
+      --light-text: #666666;
+      --bg-light: #F8FAFC;
+      --white: #FFFFFF;
+      --max-width: 1100px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+      color: var(--dark-text);
+      line-height: 1.6;
+      background-color: var(--white);
+    }
+
+    /* ヘッダー */
+    header {
+      position: sticky;
+      top: 0;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #EAEAEA;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    .nav-btn {
+      padding: 8px 18px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      transition: background-color 0.2s;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    /* ヒーローセクション */
+    .hero {
+      background: linear-gradient(135deg, #EBF2F7 0%, #F4F7F9 100%);
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--light-text);
+      margin-bottom: 32px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 16px 36px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      box-shadow: 0 4px 14px rgba(74, 144, 226, 0.4);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .cta-button:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* セクション共通 */
+    section {
+      padding: 70px 20px;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 48px;
+    }
+
+    /* 特長・ポイント */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background-color: var(--bg-light);
+      padding: 32px 24px;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: var(--light-text);
+    }
+
+    /* 使い方ステップ */
+    .steps-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background-color: var(--white);
+      border: 1px solid #EAEAEA;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .step-text h4 {
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .step-text p {
+      font-size: 0.9rem;
+      color: var(--light-text);
+    }
+
+    /* CTAセクション */
+    .bottom-cta {
+      background-color: var(--bg-light);
+      border-radius: 24px;
+      padding: 60px 20px;
+      text-align: center;
+      margin: 40px auto 80px;
+    }
+
+    .bottom-cta h2 {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    /* フッター */
+    footer {
+      border-top: 1px solid #EAEAEA;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--light-text);
+    }
+
+    /* レスポンシブ調整 */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      .section-title {
+        font-size: 1.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">ShoeFit</a>
+      <a href="app.html" class="nav-btn">今すぐ計測する</a>
+    </div>
+  </header>
+
+  <!-- ヒーローセクション -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>もうネット通販で<br>靴のサイズ選びに迷わない</h1>
+      <p>スマホのカメラで足を映すだけ。数秒であなたに最適な靴サイズをAI＆自動ロジックで試算します。</p>
+      <a href="app.html" class="cta-button">無料で計測を開始する</a>
+    </div>
+  </div>
+
+  <!-- アプリの特長 -->
+  <section>
+    <h2 class="section-title">ShoeFit が選ばれる3つの理由</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>アプリのダウンロード不要</h3>
+        <p>ブラウザ上でそのまま動くため、面倒な会員登録やインストールは一切ありません。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👟</div>
+        <h3>靴の種類ごとの余裕を考慮</h3>
+        <p>スニーカー・ビジネスシューズ・ランニング用など、用途に合わせた適切な「捨て寸」を加算します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>プライバシー安心設計</h3>
+        <p>カメラ画像や計測データが外部サーバーに送信されることはありません。すべて端末内で処理されます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 使い方 -->
+  <section>
+    <h2 class="section-title">かんたん 3ステップの使い方</h2>
+    <div class="steps-container">
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-text">
+          <h4>計測ページを開いてカメラをON</h4>
+          <p>スマホまたはPCのカメラを起動し、足元にカメラを向けます。</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-text">
+          <h4>足をガイド枠に合わせる</h4>
+          <p>画面に表示されるガイド枠に合わせて、足長（かかと〜つま先）を計測・入力します。</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-text">
+          <h4>おすすめサイズを確認</h4>
+          <p>欲しい靴のタイプ（スニーカーなど）を選ぶと、最適な推奨サイズが表示されます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下部CTA -->
+  <div class="bottom-cta">
+    <h2>理想の1足を見つけに行こう</h2>
+    <p style="margin-bottom: 24px; color: var(--light-text);">わずか1分で自分の足の正確な目安サイズがわかります。</p>
+    <a href="app.html" class="cta-button">今すぐサイズを測ってみる</a>
+  </div>
+
+  <!-- フッター -->
+  <footer>
+    <p>&copy; 2026 ShoeFit. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
