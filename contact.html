@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アウアウ - EC事業者様 お問い合わせ</title>
+  <style>
+    :root {
+      --bg-aqua: #EBF4F6;
+      --card-green: #E8F5E9;
+      --border-green: #C8E6C9;
+      --btn-yellow: #FFE066;
+      --btn-yellow-hover: #F7D038;
+      --accent-teal: #4A9E97;
+      --dark-text: #2C3E50;
+      --light-text: #607D8B;
+      --white: #FFFFFF;
+      --max-width: 600px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+      color: var(--dark-text);
+      background-color: var(--bg-aqua);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ヘッダー */
+    header {
+      background-color: var(--white);
+      padding: 14px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: var(--accent-teal);
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent-teal);
+      text-decoration: none;
+    }
+
+    /* メインフォームカード */
+    .contact-container {
+      max-width: var(--max-width);
+      width: 100%;
+      margin: 40px auto;
+      padding: 0 20px;
+      flex: 1;
+    }
+
+    .contact-card {
+      background-color: var(--white);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-header h1 {
+      font-size: 1.6rem;
+      color: var(--dark-text);
+      margin-bottom: 8px;
+    }
+
+    .form-header p {
+      font-size: 0.9rem;
+      color: var(--light-text);
+    }
+
+    /* フォーム要素 */
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--dark-text);
+    }
+
+    .required {
+      color: #E74C3C;
+      font-size: 0.8rem;
+      margin-left: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      color: var(--dark-text);
+      background-color: #FAFAFA;
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent-teal);
+      background-color: var(--white);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* ラジオボタンエリア（カテゴリ選択） */
+    .category-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .category-card {
+      position: relative;
+    }
+
+    .category-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .category-label {
+      display: block;
+      padding: 12px;
+      background-color: var(--bg-aqua);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--dark-text);
+      transition: all 0.2s;
+    }
+
+    .category-card input[type="radio"]:checked + .category-label {
+      border-color: var(--accent-teal);
+      background-color: var(--card-green);
+      color: var(--accent-teal);
+    }
+
+    /* 送信ボタン */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--btn-yellow);
+      color: var(--dark-text);
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(255, 224, 102, 0.5);
+      transition: all 0.2s;
+    }
+
+    .submit-btn:hover {
+      background-color: var(--btn-yellow-hover);
+      transform: translateY(-1px);
+    }
+
+    /* 完了メッセージ */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .success-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+    }
+
+    /* フッター */
+    footer {
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--light-text);
+      background-color: var(--white);
+    }
+
+    @media (max-width: 600px) {
+      .category-options {
+        grid-template-columns: 1fr;
+      }
+      .contact-card {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="back-btn">‹ トップへ戻る</a>
+      <a href="index.html" class="logo">アウアウ</a>
+      <div style="width: 70px;"></div>
+    </div>
+  </header>
+
+  <!-- お問い合わせコンテンツ -->
+  <div class="contact-container">
+    <div class="contact-card">
+      
+      <!-- フォーム本体 -->
+      <form id="contactForm">
+        <div class="form-header">
+          <h1>EC事業者様 お問い合わせ</h1>
+          <p>サービス連携・デモ導入・資料請求など、お気軽にご相談ください。</p>
+        </div>
+
+        <!-- お問い合わせ種別 -->
+        <div class="form-group">
+          <label>お問い合わせの目的<span class="required">*</span></label>
+          <div class="category-options">
+            <div class="category-card">
+              <input type="radio" id="type1" name="type" value="資料請求" checked>
+              <label for="type1" class="category-label">📄 資料請求</label>
+            </div>
+            <div class="category-card">
+              <input type="radio" id="type2" name="type" value="無料デモ・PoC">
+              <label for="type2" class="category-label">🧪 無料デモ・PoC希望</label>
+            </div>
+            <div class="category-card">
+              <input type="radio" id="type3" name="type" value="仕様・連携">
+              <label for="type3" class="category-label">⚙️ API/Widget連携</label>
+            </div>
+            <div class="category-card">
+              <input type="radio" id="type4" name="type" value="その他">
+              <label for="type4" class="category-label">💬 その他のご相談</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- 会社名・ショップ名 -->
+        <div class="form-group">
+          <label for="company">貴社名 / ショップ名<span class="required">*</span></label>
+          <input type="text" id="company" required placeholder="例: 株式会社サンプル / SHOES SHOP">
+        </div>
+
+        <!-- 担当者名 -->
+        <div class="form-group">
+          <label for="name">ご担当者様お名前<span class="required">*</span></label>
+          <input type="text" id="name" required placeholder="例: 山田 太郎">
+        </div>
+
+        <!-- メールアドレス -->
+        <div class="form-group">
+          <label for="email">メールアドレス<span class="required">*</span></label>
+          <input type="email" id="email" required placeholder="例: info@example.com">
+        </div>
+
+        <!-- ECサイトURL -->
+        <div class="form-group">
+          <label for="url">運営ECサイトのURL</label>
+          <input type="url" id="url" placeholder="https://example.com">
+        </div>
+
+        <!-- 相談内容詳細 -->
+        <div class="form-group">
+          <label for="message">お問い合わせ詳細</label>
+          <textarea id="message" placeholder="現在抱えているサイズ返品の課題や、導入に関するご質問などをご記入ください。"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">送信する</button>
+      </form>
+
+      <!-- 送信完了画面 (初期非表示) -->
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">🎉</div>
+        <h2>お問い合わせを受け付けました</h2>
+        <p style="color: var(--light-text); margin-top: 12px; font-size: 0.95rem;">
+          ご入力いただいたメールアドレス宛に担当者より通常1〜2営業日以内にご連絡いたします。
+        </p>
+        <a href="index.html" class="submit-btn" style="display: inline-block; text-decoration: none; margin-top: 24px; width: auto; padding: 12px 32px;">トップページへ戻る</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer>
+    <p>&copy; 2026 アウアウ. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const contactForm = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // 画面リロードを防止
+      
+      // 送信アニメーション（フォームを隠して完了メッセージを表示）
+      contactForm.style.display = 'none';
+      successMessage.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
