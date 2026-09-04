@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アウアウ - 足のサイズ計測</title>
+  <style>
+    /* ==========================================
+       CSS (パステルカラーテーマ：薄水色・薄緑・黄色)
+       ========================================== */
+    :root {
+      --bg-aqua: #EBF4F6;
+      --card-green: #E8F5E9;
+      --border-green: #C8E6C9;
+      --btn-yellow: #FFE066;
+      --btn-yellow-hover: #F7D038;
+      --accent-teal: #4A9E97;
+      --dark-text: #2C3E50;
+      --light-text: #607D8B;
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: var(--dark-text);
+      background-color: var(--bg-aqua);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* ヘッダー */
+    header {
+      width: 100%;
+      background-color: var(--white);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: var(--accent-teal);
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--accent-teal);
+    }
+
+    /* メインコンテンツ容器 */
+    .container {
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* カメラ＆AR枠エリア */
+    .camera-box {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background-color: #000;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ガイド枠のオーバーレイ */
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    /* A4用紙ガイド（黄色ライン） */
+    .paper-guide {
+      width: 140px;
+      height: 200px;
+      border: 3px dashed var(--btn-yellow);
+      border-radius: 8px;
+      background-color: rgba(255, 224, 102, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--btn-yellow);
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* ガイドテキスト */
+    .guide-message {
+      position: absolute;
+      top: 16px;
+      background-color: rgba(0,0,0,0.6);
+      color: var(--white);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    /* コントロールエリア */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .shutter-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--btn-yellow);
+      color: var(--dark-text);
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+
+    .shutter-btn:hover {
+      background-color: var(--btn-yellow-hover);
+    }
+
+    /* 計測結果表示カード (薄緑) */
+    .result-card {
+      display: none; /* 初期状態は非表示 */
+      background-color: var(--card-green);
+      border: 2px solid var(--border-green);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .result-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .size-value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--accent-teal);
+      margin: 8px 0;
+    }
+
+    .shoe-type-selector {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .type-btn {
+      padding: 6px 12px;
+      background-color: var(--white);
+      border: 1px solid var(--border-green);
+      border-radius: 12px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .type-btn.active {
+      background-color: var(--accent-teal);
+      color: var(--white);
+      border-color: var(--accent-teal);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header>
+    <a href="index.html" class="back-btn">‹ 戻る</a>
+    <div class="logo">アウアウ</div>
+    <div style="width: 40px;"></div> <!-- レイアウト崩れ防止用ダミー -->
+  </header>
+
+  <!-- メインコンテンツ -->
+  <div class="container">
+    
+    <!-- カメラ画面 -->
+    <div class="camera-box">
+      <video id="video" autoplay playsinline></video>
+      <div class="overlay">
+        <div class="guide-message">A4用紙と足を枠内に合わせてください</div>
+        <div class="paper-guide">A4用紙ガイド</div>
+      </div>
+    </div>
+
+    <!-- 操作ボタン -->
+    <div class="controls">
+      <button class="shutter-btn" id="captureBtn">📷 サイズを計測する</button>
+    </div>
+
+    <!-- 結果表示エリア (撮影後に自動開く) -->
+    <div class="result-card" id="resultCard">
+      <h3>🎉 計測結果</h3>
+      <p style="font-size: 0.85rem; color: var(--light-text);">推定足長: 25.2 cm</p>
+      
+      <div class="size-value" id="sizeDisplay">26.0 cm</div>
+
+      <p style="font-size: 0.85rem; color: var(--light-text); margin-bottom: 8px;">おすすめの靴タイプ:</p>
+      <div class="shoe-type-selector">
+        <button class="type-btn active" onclick="updateSize('スニーカー', 26.0)">スニーカー</button>
+        <button class="type-btn" onclick="updateSize('革靴', 25.5)">革靴・パンプス</button>
+        <button class="type-btn" onclick="updateSize('ランニング', 26.5)">ランニング</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // カメラの起動処理
+    const video = document.getElementById('video');
+    const captureBtn = document.getElementById('captureBtn');
+    const resultCard = document.getElementById('resultCard');
+    const sizeDisplay = document.getElementById('sizeDisplay');
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' } // 背面カメラを使用
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error("カメラの起動に失敗しました:", err);
+        alert("カメラへのアクセスを許可してください。");
+      }
+    }
+
+    // 計測ボタンを押した時の動き（シミュレーション）
+    captureBtn.addEventListener('click', () => {
+      // 本来は画像解析を行いますが、サンプルとして結果カードを表示します
+      resultCard.style.display = 'block';
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // 靴タイプ変更による推奨サイズ切り替え
+    function updateSize(type, size) {
+      sizeDisplay.textContent = size.toFixed(1) + " cm";
+      
+      const buttons = document.querySelectorAll('.type-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    // ページ読み込み時にカメラを起動
+    startCamera();
+  </script>
+</body>
+</html>
